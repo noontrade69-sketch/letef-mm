@@ -4,7 +4,7 @@ import { useState } from "react";
 import { COMMANDS } from "@/lib/data";
 import { CopyIcon, CheckIcon } from "./Icons";
 
-function CopyRow({ cmd, desc }: { cmd: string; desc: string }) {
+function CmdRow({ cmd, desc }: { cmd: string; desc: string }) {
   const [ok, setOk] = useState(false);
   const copy = async () => {
     let done = false;
@@ -12,13 +12,12 @@ function CopyRow({ cmd, desc }: { cmd: string; desc: string }) {
       await navigator.clipboard.writeText(cmd);
       done = true;
     } catch {
-      /* clipboard API unavailable — fall through to execCommand */
+      /* fall through */
     }
     if (!done) {
       try {
         const ta = document.createElement("textarea");
         ta.value = cmd;
-        ta.setAttribute("readonly", "");
         ta.style.position = "fixed";
         ta.style.opacity = "0";
         document.body.appendChild(ta);
@@ -40,7 +39,6 @@ function CopyRow({ cmd, desc }: { cmd: string; desc: string }) {
       <p>{desc}</p>
       <button className={`copy-btn${ok ? " ok" : ""}`} onClick={copy} aria-label={`Copy ${cmd}`}>
         {ok ? <CheckIcon /> : <CopyIcon />}
-        {ok ? "Copied" : "Copy"}
       </button>
     </div>
   );
@@ -48,22 +46,30 @@ function CopyRow({ cmd, desc }: { cmd: string; desc: string }) {
 
 export default function Commands() {
   return (
-    <section className="sec sec-panel" id="commands">
+    <section className="sec" id="commands">
       <div className="wrap">
         <div className="sec-head rv">
-          <span className="kicker micro">Commands</span>
-          <h2>Everything the bot can do, on one page.</h2>
-          <p>Where a command works depends on where you use it — main group, escrow room, or private chat.</p>
+          <h2>The bot&rsquo;s whole vocabulary.</h2>
+          <p className="sub">
+            Scope depends on where you type it — main group, escrow room, or private chat.
+          </p>
         </div>
-        <div className="cmd-groups">
-          {COMMANDS.map((g) => (
-            <div className="cmd-group rv" key={g.group}>
-              <h3>{g.group}</h3>
-              {g.items.map((it) => (
-                <CopyRow key={it.cmd} cmd={it.cmd} desc={it.desc} />
-              ))}
-            </div>
-          ))}
+
+        <div className="term rv">
+          <div className="term-bar" aria-hidden>
+            <i /><i /><i />
+            <span className="path">letef@bot ~ commands</span>
+          </div>
+          <div className="term-cols">
+            {COMMANDS.map((g) => (
+              <div className="term-col" key={g.group}>
+                <p className="g">{g.group}</p>
+                {g.items.map((it) => (
+                  <CmdRow key={it.cmd} {...it} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

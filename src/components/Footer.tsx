@@ -1,84 +1,60 @@
 import { LINKS } from "@/lib/data";
-import { TgIcon, UsersIcon } from "./Icons";
 
 export default function Footer() {
   return (
     <>
-      <section className="final sec-dark">
-        <div className="wrap rv">
-          <h2>Ready to trade with the contract between you?</h2>
-          <p>
-            Open the bot, join the room, and let the vault hold the crypto while you settle the
-            local leg.
-          </p>
-          <div className="hero-ctas" style={{ justifyContent: "center" }}>
-            <a className="btn btn-y" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
-              <TgIcon /> Open Telegram Bot
-            </a>
-            <a className="btn btn-ghost" href={LINKS.vouch} target="_blank" rel="noopener noreferrer">
-              Read public vouches
-            </a>
-          </div>
-          <p className="join-note" style={{ justifyContent: "center" }}>
-            <UsersIcon />
-            <span>
-              Both memberships are required before the bot responds: <b>{LINKS.groupHandle}</b> and <b>{LINKS.channelHandle}</b>.
-            </span>
-          </p>
-        </div>
-      </section>
-
       <footer className="footer">
         <div className="wrap">
           <div className="foot-grid">
             <div className="foot-brand">
-              <a href="#top" className="brand">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/letef-mark.svg" alt="" width={34} height={34} />
-                <span>
-                  Letef Mm
-                  <small>Trusted P2P Escrow</small>
-                </span>
-              </a>
-              <p>
-                A Telegram-native P2P escrow service for stablecoin trades. Funds are locked in a
-                public smart contract and released only when both sides confirm.
-              </p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/letef-mark.svg" alt="Letef Mm logo" width={30} height={30} />
+              <p className="fb-name">Letef Mm</p>
+              <p className="fb-sub">P2P escrow, run in Telegram</p>
             </div>
             <div>
-              <h3>Product</h3>
-              <a href="#how-it-works">How it works</a>
-              <a href="#fees">Fees</a>
-              <a href="#security">Security</a>
-              <a href="#commands">Commands</a>
+              <h3>Site</h3>
+              <ul>
+                <li><a href="#how-it-works">How it works</a></li>
+                <li><a href="#fees">Fees</a></li>
+                <li><a href="#vaults">Vaults</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#faq">FAQ</a></li>
+              </ul>
             </div>
             <div>
               <h3>Community</h3>
-              <a href={LINKS.group} target="_blank" rel="noopener noreferrer">Main group {LINKS.groupHandle}</a>
-              <a href={LINKS.channel} target="_blank" rel="noopener noreferrer">Channel {LINKS.channelHandle}</a>
-              <a href={LINKS.vouch} target="_blank" rel="noopener noreferrer">Vouches {LINKS.vouchHandle}</a>
-              <a href={LINKS.bot} target="_blank" rel="noopener noreferrer">Escrow bot</a>
+              <ul>
+                <li><a href={LINKS.group} target="_blank" rel="noopener noreferrer">Main group {LINKS.groupHandle}</a></li>
+                <li><a href={LINKS.channel} target="_blank" rel="noopener noreferrer">Channel {LINKS.channelHandle}</a></li>
+                <li><a href={LINKS.vouch} target="_blank" rel="noopener noreferrer">Vouches {LINKS.vouchHandle}</a></li>
+                <li><a href={LINKS.bot} target="_blank" rel="noopener noreferrer">Escrow bot</a></li>
+              </ul>
             </div>
             <div>
               <h3>Support</h3>
-              <a href={LINKS.support} target="_blank" rel="noopener noreferrer">{LINKS.supportHandle}</a>
-              <a href={LINKS.line1} target="_blank" rel="noopener noreferrer">@zvaku</a>
-              <a href={LINKS.line2} target="_blank" rel="noopener noreferrer">@letef</a>
+              <ul>
+                <li><a href={LINKS.support} target="_blank" rel="noopener noreferrer">{LINKS.supportHandle}</a></li>
+                <li><a href={LINKS.line1} target="_blank" rel="noopener noreferrer">@zvaku</a></li>
+                <li><a href={LINKS.developer} target="_blank" rel="noopener noreferrer">@letef</a></li>
+              </ul>
             </div>
           </div>
           <div className="foot-base">
             <span>© {new Date().getFullYear()} Letef Mm — Trusted P2P Escrow</span>
             <span>
               Crypto trading carries risk. Escrow secures the crypto leg only — see{" "}
-              <a href="#security" style={{ color: "var(--yellow)" }}>Security &amp; risk disclosure</a>.
+              <a href="#vaults">Security &amp; risk disclosure</a>.
             </span>
           </div>
         </div>
       </footer>
-
       <div className="sticky-cta">
-        <a className="btn btn-y" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
-          <TgIcon /> Open Telegram Bot
+        <a href={LINKS.bot} target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M21.9 4.6 18.8 19c-.2 1-.8 1.2-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-.9.5l.3-4.6L18.2 6.9c.4-.3-.1-.5-.6-.2L7.1 13.2l-4.5-1.4c-1-.3-1-1 .2-1.4L20.4 3.2c.8-.3 1.5.2 1.5 1.4Z" />
+          </svg>
+          Open Telegram Bot
         </a>
       </div>
     </>

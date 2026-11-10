@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const grotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk", display: "swap" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
@@ -16,11 +15,16 @@ export const metadata: Metadata = {
       "Funds locked in a smart contract. Released only when both sides confirm. Every completed deal publicly vouched. From 0.25% fee.",
     url: "https://letef-mm.onrender.com",
     siteName: "Letef Mm",
-    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Letef Mm — Trusted P2P Escrow" }],
     type: "website",
   },
-  twitter: { card: "summary_large_image", images: ["/og.jpg"] },
-  alternates: { canonical: "/" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Letef Mm — Trusted P2P Escrow",
+    description:
+      "Funds locked in a smart contract. Released only when both sides confirm. From 0.25% fee.",
+    images: ["/og.jpg"],
+  },
   icons: { icon: "/favicon.png" },
 };
 
@@ -32,7 +36,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${grotesk.variable} ${inter.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

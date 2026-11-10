@@ -2,58 +2,62 @@
 
 import { useEffect, useState } from "react";
 import { LINKS } from "@/lib/data";
-import { TgIcon, MenuIcon } from "./Icons";
+import { TelegramIcon, MenuIcon, CloseIcon } from "./Icons";
 
 const NAV = [
   ["How it works", "#how-it-works"],
   ["Fees", "#fees"],
-  ["Security", "#security"],
-  ["Vouches", "#vouches"],
+  ["Vaults", "#vaults"],
   ["Commands", "#commands"],
   ["FAQ", "#faq"],
-] as const;
+];
 
 export default function Header() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setSolid(window.scrollY > 8);
+    fn();
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
+
   return (
     <>
-      <header className={`header${solid ? " is-solid" : ""}`}>
-        <div className="wrap header-in">
+      <header className={`header${solid ? " solid" : ""}`}>
+        <div className="wrap">
           <a href="#top" className="brand">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/letef-mark.svg" alt="" width={34} height={34} />
-            <span>
-              Letef Mm
-              <small>Trusted P2P Escrow</small>
-            </span>
+            <img src="/letef-mark.svg" alt="Letef Mm logo" width={26} height={26} />
+            Letef Mm
           </a>
           <nav className="nav" aria-label="Main">
-            {NAV.map(([label, href]) => (
-              <a key={href} href={href}>{label}</a>
+            {NAV.map(([t, h]) => (
+              <a key={h} href={h}>{t}</a>
             ))}
           </nav>
-          <a className="btn btn-y" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
-            <TgIcon /> Open Telegram Bot
-          </a>
-          <button className="menu-btn" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-            <MenuIcon width={22} height={22} />
-          </button>
+          <div className="head-cta">
+            <a className="comm" href={LINKS.group} target="_blank" rel="noopener noreferrer">Community</a>
+            <a className="btn btn-y" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
+              <TelegramIcon /> Open Bot
+            </a>
+            <button
+              className="menu-btn"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <CloseIcon /> : <MenuIcon />}
+            </button>
+          </div>
         </div>
       </header>
       <nav className={`mnav${open ? " open" : ""}`} aria-label="Mobile">
-        {NAV.map(([label, href]) => (
-          <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
+        {NAV.map(([t, h]) => (
+          <a key={h} href={h} onClick={() => setOpen(false)}>{t}</a>
         ))}
-        <a className="btn btn-y" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
-          <TgIcon /> Open Telegram Bot
-        </a>
+        <a href={LINKS.group} target="_blank" rel="noopener noreferrer">Community — {LINKS.groupHandle}</a>
       </nav>
     </>
   );

@@ -1,84 +1,63 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-/* Fee calculator — implements ONLY the exact published fee logic:
-   service 0.75 / 0.50 / 0.25 % by bio-tag count, network fee row chosen
-   explicitly by the visitor (standard / with bio tag). Nothing inferred.
-   Estimates only — not a live transaction quote. */
-
-type TagCount = 0 | 1 | 2;
-const SERVICE: Record<TagCount, number> = { 0: 0.0075, 1: 0.005, 2: 0.0025 };
-const NETWORK = {
-  bep: { label: "BNB Smart Chain (BEP-20)", standard: 0.2, tagged: 0.2 },
-  tron: { label: "TRON (TRC-20)", standard: 3.0, tagged: 2.0 },
-} as const;
-
-const fmt = (n: number) =>
-  n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const TAG_OPTIONS = [
+  { label: "No tag", n: 0 },
+  { label: "One side", n: 1 },
+  { label: "Both sides", n: 2 },
+];
+const NETWORKS = [
+  { label: "BNB Chain (BEP-20)", fee: 0.2, taggedFee: 0.2 },
+  { label: "TRON (TRC-20)", fee: 3.0, taggedFee: 2.0 },
+];
+const RATES = [0.0075, 0.005, 0.0025];
 
 export default function FeeCalc() {
-  const [amount, setAmount] = useState("100");
-  const [tags, setTags] = useState<TagCount>(2);
-  const [chain, setChain] = useState<keyof typeof NETWORK>("bep");
-  const [netRow, setNetRow] = useState<"standard" | "tagged">("standard");
+  const [amt, setAmt] = useState("100");
+  const [tags, setTags] = useState(2);
+  const [net, setNet] = useState(0);
 
-  const out = useMemo(() => {
-    const amt = Math.max(0, Number(amount) || 0);
-    const servicePct = SERVICE[tags];
-    const service = amt * servicePct;
-    const net = NETWORK[chain][netRow];
-    const netAmount = Math.max(0, amt - service - net);
-    return { amt, servicePct, service, net, netAmount };
-  }, [amount, tags, chain, netRow]);
-
-  const seg = (pressed: boolean) => ({ "aria-pressed": pressed }) as { "aria-pressed": boolean };
+  const amount = Math.max(0, parseFloat(amt) || 0);
+  const service = amount * RATES[tags];
+  const network = tags === 2 ? NETWORKS[net].taggedFee : NETWORKS[net].fee;
+  const total = amount - service - network;
+  const f = (x: number) => x.toFixed(2);
 
   return (
-    <div className="calc">
+    <div className="calc rv">
       <h3>Fee calculator</h3>
-      <div className="row">
-        <label htmlFor="calc-amt">Deal size (USDT)</label>
-        <input
-          id="calc-amt" type="number" inputMode="decimal" min={0} step="1"
-          value={amount} onChange={(e) => setAmount(e.target.value)}
-        />
+      <label className="lbl" htmlFor="calc-amt">Deal size (USDT)</label>
+      <input
+        id="calc-amt"
+        type="text"
+        inputMode="decimal"
+        value={amt}
+        onChange={(e) => setAmt(e.target.value.replace(/[^0-9.]/g, ""))}
+      />
+      <span className="lbl" id="calc-tags-lbl">@letefmm bio tag</span>
+      <div className="seg" role="group" aria-labelledby="calc-tags-lbl">
+        {TAG_OPTIONS.map((o) => (
+          <button key={o.n} type="button" aria-pressed={tags === o.n} onClick={() => setTags(o.n)}>
+            {o.label}
+          </button>
+        ))}
       </div>
-      <div className="row">
-        <label>How many sides carry the @letefmm bio tag?</label>
-        <div className="seg" role="group" aria-label="Bio tag count">
-          {([0, 1, 2] as TagCount[]).map((n) => (
-            <button key={n} type="button" {...seg(tags === n)} onClick={() => setTags(n)}>
-              {["Neither", "One side", "Both"][n]}
-            </button>
-          ))}
-        </div>
+      <span className="lbl" id="calc-net-lbl">Network</span>
+      <div className="seg two" role="group" aria-labelledby="calc-net-lbl">
+        {NETWORKS.map((n, i) => (
+          <button key={n.label} type="button" aria-pressed={net === i} onClick={() => setNet(i)}>
+            {n.label}
+          </button>
+        ))}
       </div>
-      <div className="row">
-        <label>Network</label>
-        <div className="seg" role="group" aria-label="Network">
-          <button type="button" {...seg(chain === "bep")} onClick={() => setChain("bep")}>BEP-20</button>
-          <button type="button" {...seg(chain === "tron")} onClick={() => setChain("tron")}>TRC-20</button>
-        </div>
-      </div>
-      <div className="row">
-        <label>Network fee row</label>
-        <div className="seg" role="group" aria-label="Network fee row">
-          <button type="button" {...seg(netRow === "standard")} onClick={() => setNetRow("standard")}>Standard</button>
-          <button type="button" {...seg(netRow === "tagged")} onClick={() => setNetRow("tagged")}>With bio tag</button>
-        </div>
-      </div>
-
       <div className="calc-out" aria-live="polite">
-        <div className="line"><span>Deal size</span><b>{fmt(out.amt)} USDT</b></div>
-        <div className="line"><span>Service fee ({(out.servicePct * 100).toFixed(2)}%)</span><b>{fmt(out.service)} USDT</b></div>
-        <div className="line"><span>Network fee — {NETWORK[chain].label}</span><b>{fmt(out.net)} USDT</b></div>
-        <div className="net line"><span>Estimated net amount</span><b>{fmt(out.netAmount)} USDT</b></div>
+        <div className="row"><span>Deal size</span><b>{f(amount)} USDT</b></div>
+        <div className="row"><span>Service fee ({(RATES[tags] * 100).toFixed(2)}%)</span><b>{f(service)} USDT</b></div>
+        <div className="row"><span>Network fee — {NETWORKS[net].label}</span><b>{f(network)} USDT</b></div>
+        <div className="row total"><span>Estimated net</span><b>{f(total)} USDT</b></div>
       </div>
-      <p className="calc-disc">
-        Estimates only — the contract charges the published fee on completion. Selected assumptions
-        are shown above; this is not a live transaction quote. Minimum deal size: 3 USDT.
-      </p>
+      <p className="calc-note">Estimates only. The contract charges the fee on release or refund.</p>
     </div>
   );
 }

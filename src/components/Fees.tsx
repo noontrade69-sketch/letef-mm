@@ -1,67 +1,61 @@
 import { FEES } from "@/lib/data";
-import { CheckIcon, ShieldIcon } from "./Icons";
 import FeeCalc from "./FeeCalc";
 
 export default function Fees() {
   return (
-    <section className="sec sec-dark" id="fees">
+    <section className="sec" id="fees">
       <div className="wrap">
         <div className="sec-head rv">
-          <span className="kicker micro">Fees</span>
-          <h2>Exact numbers. Nothing hidden.</h2>
-          <p>
-            The service fee is charged by the smart contract on release or refund. The tier is set
-            by how many sides of the trade carry the @letefmm bio tag.
+          <h2>0.25% to 0.75%. That is the whole price list.</h2>
+          <p className="sub">
+            The contract charges the service fee on release or refund. The tier is set by how many
+            sides of the trade carry the @letefmm bio tag.
           </p>
         </div>
-        <div className="fee-grid">
+
+        <div className="fees-grid">
           <div className="rv">
+            <div className="tiers">
+              {FEES.service.map((s, i) => (
+                <div className={`tier${i === 2 ? " hot" : ""}`} key={s.pct}>
+                  <div className="pct">{s.pct}</div>
+                  <div className="cond">{s.cond}</div>
+                </div>
+              ))}
+            </div>
+
             <table className="fee-table">
               <thead>
-                <tr><th scope="col">Bio tag status</th><th scope="col">Service fee</th></tr>
+                <tr>
+                  <th scope="col">Network fee</th>
+                  <th scope="col" className="num">Standard</th>
+                  <th scope="col" className="num">Both tagged</th>
+                </tr>
               </thead>
               <tbody>
-                {FEES.service.map((r) => (
-                  <tr key={r.tag}>
-                    <td>{r.tag}</td>
-                    <td className="pct">{r.pct}</td>
+                {FEES.network.map((n) => (
+                  <tr key={n.chain}>
+                    <td>{n.chain}</td>
+                    <td className="num">{n.standard}</td>
+                    <td className="num">{n.tagged}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <table className="fee-table" style={{ marginTop: 16 }}>
-              <thead>
-                <tr><th scope="col">Network</th><th scope="col">Standard</th><th scope="col">With bio tag</th></tr>
-              </thead>
-              <tbody>
-                {FEES.network.map((r) => (
-                  <tr key={r.chain}>
-                    <td>{r.chain}</td>
-                    <td>{r.standard}</td>
-                    <td>{r.tagged}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <ul className="fee-terms">
-              <li><CheckIcon /> Minimum deal size: 3 USDT</li>
-              <li><CheckIcon /> No fee to open a deal</li>
-              <li><CheckIcon /> No fee to cancel an unfunded deal</li>
-              <li><CheckIcon /> No monthly or subscription charge</li>
-              <li><CheckIcon /> No hidden charges, spread mark-up, or withdrawal fee</li>
-              <li><CheckIcon /> Fee changes require a 24-hour timelock, cancellable in that window</li>
-            </ul>
-          </div>
-          <div className="rv">
-            <div className="biobox">
-              <h3>Lower your fee with <code>{FEES.bioTag}</code></h3>
-              <p>
-                Add {FEES.bioTag} to your Telegram bio. It is free and lowers the service fee.
-                When both traders carry the tag, the lowest published service fee is 0.25%.
-              </p>
+
+            <div className="chips">
+              {FEES.chips.map((c) => (
+                <span key={c}>{c}</span>
+              ))}
             </div>
-            <FeeCalc />
+
+            <div className="biobox">
+              <p className="bt">Lower your fee — @letefmm</p>
+              {FEES.bioTagBox}
+            </div>
           </div>
+
+          <FeeCalc />
         </div>
       </div>
     </section>

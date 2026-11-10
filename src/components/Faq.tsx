@@ -1,24 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { FAQ, LINKS } from "@/lib/data";
-import { PlusIcon } from "./Icons";
+import { FAQ } from "@/lib/data";
+import { ChevronIcon } from "./Icons";
 
 export default function Faq() {
-  const [open, setOpen] = useState<number>(-1);
+  const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="sec sec-dark" id="faq">
+    <section className="sec" id="faq">
       <div className="wrap">
-        <div className="sec-head rv" style={{ textAlign: "center", marginInline: "auto" }}>
-          <span className="kicker micro">FAQ</span>
-          <h2>Asked before you ask.</h2>
+        <div className="sec-head rv">
+          <h2>Questions traders actually ask.</h2>
         </div>
-        <div className="faq">
+        <div className="qa rv">
           {FAQ.map((f, i) => (
-            <div className="qa rv" key={f.q} data-open={open === i}>
-              <button aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>
+            <div className="qa-item" key={i} data-open={open === i}>
+              <button
+                className="q"
+                aria-expanded={open === i}
+                onClick={() => setOpen(open === i ? null : i)}
+              >
                 {f.q}
-                <PlusIcon />
+                <ChevronIcon className="chev" />
               </button>
               <div className="a">
                 <div><p>{f.a}</p></div>
@@ -26,9 +29,6 @@ export default function Faq() {
             </div>
           ))}
         </div>
-        <p className="rv" style={{ textAlign: "center", marginTop: 26, fontSize: 14, color: "var(--text-3)" }}>
-          Still stuck? Message <a href={LINKS.support} target="_blank" rel="noopener noreferrer" style={{ color: "var(--yellow)" }}>{LINKS.supportHandle}</a> — or check that you joined {LINKS.groupHandle} and {LINKS.channelHandle} first.
-        </p>
       </div>
     </section>
   );

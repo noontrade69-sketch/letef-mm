@@ -18,94 +18,135 @@ export const LINKS = {
 
 export const VAULTS = [
   {
-    tier: "0.25% tier",
+    tier: "0.25%",
     address: "0xa91ffF1E9eb8d0621560cdcf0f6BbE60b7182BF8",
     url: "https://bscscan.com/address/0xa91ffF1E9eb8d0621560cdcf0f6BbE60b7182BF8",
   },
   {
-    tier: "0.50% tier",
+    tier: "0.50%",
     address: "0xF101df779D9dA44cF1C44F8CA0E750277E4A14D5",
     url: "https://bscscan.com/address/0xF101df779D9dA44cF1C44F8CA0E750277E4A14D5",
   },
   {
-    tier: "0.75% tier",
+    tier: "0.75%",
     address: "0x4198c2b639703d86D80beA498a0BE905671495Ae",
     url: "https://bscscan.com/address/0x4198c2b639703d86D80beA498a0BE905671495Ae",
   },
 ];
 
+export const HERO = {
+  h1a: "Telegram escrow,",
+  h1b: "settled on-chain.",
+  sub: "Letef Mm runs escrow rooms for P2P deals. The seller's USDT is locked in a public smart-contract vault, the buyer pays local currency directly, and the contract releases only when both sides confirm.",
+  join: "Join both @LetefP2p and @LetefMm before opening the bot.",
+  facts: [
+    { v: "0.25–0.75%", k: "Service fee per deal" },
+    { v: "3 USDT", k: "Minimum deal size" },
+    { v: "BSC + TRON", k: "Supported networks" },
+    { v: "24 h", k: "Notice on any fee change" },
+    { v: "Public", k: "Vaults, readable on BscScan" },
+  ],
+};
+
+/* Sample escrow-room conversation. Numbers are illustrative and labeled as such on the page. */
+export const CHAT = [
+  { from: "buyer", mono: "/deal 100 USDT" },
+  { from: "bot", text: "Deal #1043 opened. Private room · 2 traders + bot. Seller: send 100 USDT to the vault address shown below." },
+  { from: "bot", text: "Deposit confirmed — 100 USDT locked in EscrowVaultV2.", link: "View on BscScan" },
+  { from: "seller", text: "Deposit is in. @buyer, send the payment." },
+  { from: "buyer", text: "Paid. Receiving now." },
+  { from: "buyer", mono: "/release" },
+  { from: "bot", text: "Both sides confirmed. 99.75 USDT released to the buyer's wallet · fee 0.25 USDT (0.25%). Deal complete." },
+  { from: "bot", text: "Vouch posted in @LetefVouch." },
+];
+
+export const STEPS = [
+  {
+    n: "A",
+    scope: "GROUP",
+    title: "Open the deal",
+    body: "Run /deal in @LetefP2p. The bot opens a private escrow room, then collects amount, network, coin, rate, payment method, and each side's wallet address.",
+  },
+  {
+    n: "B",
+    scope: "ON-CHAIN",
+    title: "Seller deposits",
+    body: "USDT goes straight to the vault contract. The bot shows the address, takes the transaction hash, and verifies the deposit on-chain before the room turns funded.",
+  },
+  {
+    n: "C",
+    scope: "CONTRACT",
+    title: "The contract holds it",
+    body: "EscrowVaultV2 keeps the amount locked for the whole deal. Your crypto is deposited into a public smart-contract vault, not a staff member's personal wallet.",
+  },
+  {
+    n: "D",
+    scope: "OFF-CHAIN",
+    title: "Buyer pays local currency",
+    body: "Local currency is paid directly between traders — it is not held in the crypto escrow contract. The contract never touches this leg.",
+  },
+  {
+    n: "E",
+    scope: "CONTRACT",
+    title: "Confirm and release",
+    body: "The release is a contract call to the buyer's wallet, coordinated by the bot. Only confirm release after the payment has actually arrived.",
+  },
+  {
+    n: "F",
+    scope: "PUBLIC",
+    title: "Receipts for everyone",
+    body: "Closing generates proof cards for buyer and seller and posts a public record in @LetefVouch. /vouch re-issues a trader's latest proof at any time.",
+  },
+];
+
+export const DISPUTE = {
+  title: "If a deal goes sideways",
+  items: [
+    { cmd: "/dispute", body: "alerts admins, pulls them into the room, and funds stay locked while it is open." },
+    { cmd: "/refund", body: "returns the funds to the seller's address through the contract flow." },
+    { cmd: "Never release early", body: "— release only after the local payment has actually arrived." },
+  ],
+};
+
 export const FEES = {
   service: [
-    { tag: "Neither side has the bio tag", pct: "0.75%" },
-    { tag: "One side has the bio tag", pct: "0.50%" },
-    { tag: "Both sides have the bio tag", pct: "0.25%" },
+    { pct: "0.75%", cond: "No bio tag on the deal" },
+    { pct: "0.50%", cond: "One side carries @letefmm" },
+    { pct: "0.25%", cond: "Both sides carry @letefmm" },
   ],
   network: [
     { chain: "BNB Smart Chain (BEP-20)", standard: "0.20 USDT", tagged: "0.20 USDT" },
     { chain: "TRON (TRC-20)", standard: "3.00 USDT", tagged: "2.00 USDT" },
   ],
-  minDeal: 3,
-  bioTag: "@letefmm",
+  chips: ["3 USDT minimum deal", "No fee to open a deal", "No fee to cancel unfunded", "No subscription"],
+  bioTagBox:
+    "Add @letefmm to your Telegram bio. It is free and lowers the service fee. When both traders carry the tag, the lowest published service fee is 0.25%.",
 };
 
-export const STEPS = [
-  {
-    id: "deal",
-    n: "01",
-    tag: "A · DEAL CREATED",
-    title: "Deal created",
-    body: "Open /deal in the main group. The bot creates a private escrow room for the two traders and the bot, then collects details step by step: amount, network, coin, rate, payment method, and each side's wallet address.",
-  },
-  {
-    id: "deposit",
-    n: "02",
-    tag: "B · CRYPTO DEPOSITED",
-    title: "Crypto deposited",
-    body: "The seller sends crypto to the escrow vault contract on-chain. The bot displays a QR code and contract address; the sender submits the transaction hash and the bot verifies it on-chain.",
-  },
-  {
-    id: "locked",
-    n: "03",
-    tag: "C · CONTRACT LOCKED",
-    title: "Contract locked",
-    body: "The vault holds the seller's crypto. The contract emits an on-chain event, and the room shows the deal as funded. Nothing moves without the contract's release or refund functions.",
-  },
-  {
-    id: "local",
-    n: "04",
-    tag: "D · LOCAL PAYMENT — OUTSIDE THE CONTRACT",
-    title: "Local payment",
-    body: "The buyer pays the seller in local currency directly between themselves and confirms in the room. Local currency is paid directly between traders — it is not held in the crypto escrow contract.",
-  },
-  {
-    id: "release",
-    n: "05",
-    tag: "E · CONFIRMATION / RELEASE",
-    title: "Confirmation / release",
-    body: "The bot coordinates the release flow; the release itself is a contract call to the buyer's wallet. Only confirm release after the payment has actually arrived.",
-  },
-  {
-    id: "vouch",
-    n: "06",
-    tag: "F · PUBLIC VOUCH",
-    title: "Public vouch",
-    body: "The deal closes and a public vouch proof card is generated and posted to the vouch channel. /vouch re-issues the trader's latest proof at any time.",
-  },
+export const VAULT_LEAD =
+  "Your crypto is deposited into a public smart-contract vault, not a staff member's personal wallet.";
+
+export const MECHS = [
+  "release() and refund() are owner-role calls. That operator power is part of the published design.",
+  "Fee changes queue for 24 hours before they activate, and can be cancelled inside that window.",
+  "The vault can be paused in an emergency, which blocks both release and refund.",
+  "Reentrancy protection exists on every function that moves funds.",
+  "Each release and refund emits an on-chain event with gross amount, net amount, and fee.",
+  "Payment addresses are shown back to both participants for confirmation before the trade starts.",
+  "Disputes notify admins, post to the dispute channel, and pull an admin into the room.",
+  "Fee accounting lives on-chain: the contract takes its cut, events show the rest.",
 ];
 
-export const DISPUTES = [
-  { cmd: "/refund", body: "returns the funds to the seller's address through the contract flow." },
-  { cmd: "/dispute", body: "alerts admins and brings them into the room before anything moves; funds stay locked while the dispute is open." },
-  { cmd: "Never release early", body: "users must never release funds before they have actually received the local-currency payment." },
-];
+export const RISK_LINE =
+  "Escrow covers the crypto leg only. Admins mediate local-currency disputes; the contract executes the outcome.";
 
 export const COMMANDS = [
   {
-    group: "In the main group",
+    group: "Main group",
     items: [{ cmd: "/deal", desc: "Open a new escrow deal." }],
   },
   {
-    group: "Inside an escrow room",
+    group: "Escrow room",
     items: [
       { cmd: "/balance", desc: "Show what is currently locked in escrow." },
       { cmd: "/release", desc: "Release the locked crypto to the buyer's wallet." },
@@ -120,7 +161,7 @@ export const COMMANDS = [
     ],
   },
   {
-    group: "In private chat",
+    group: "Private chat",
     items: [
       { cmd: "/start", desc: "Verify channel membership and open the menu." },
       { cmd: "/help", desc: "Full command list." },
@@ -129,6 +170,14 @@ export const COMMANDS = [
       { cmd: "/vouch", desc: "Re-send your latest proof." },
     ],
   },
+];
+
+export const VOUCH_POINTS = [
+  "Every completed deal produces a proof card: deal ID, amount, network, rate, date.",
+  "Three vouches per deal — one for the buyer, one for the seller, one public record.",
+  "Vouches can be copied and reused anywhere.",
+  "/vouch re-issues a trader's latest proof at any time.",
+  "Proofs are rebuilt from the database, do not expire, and are backed by an on-chain transaction.",
 ];
 
 export const FAQ = [
