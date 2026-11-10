@@ -1,0 +1,40 @@
+const { chromium } = require("playwright");
+const OUT = "/home/user/letef-qa";
+(async () => {
+  const b = await chromium.launch({ args: ["--no-sandbox"] });
+  const p = await (await b.newContext({ viewport: { width: 1440, height: 810 } })).newPage();
+  await p.goto("http://localhost:4600", { waitUntil: "load" });
+  await p.waitForTimeout(1800);
+  await p.screenshot({ path: `${OUT}/final-d-hero.png` });
+  const howTop = await p.evaluate(() => document.querySelector("#how-it-works").getBoundingClientRect().top + scrollY);
+  await p.evaluate((y) => scrollTo(0, y + 1300), howTop);
+  await p.waitForTimeout(1300);
+  await p.screenshot({ path: `${OUT}/final-d-story1.png` });
+  await p.evaluate((y) => scrollTo(0, y + 2600), howTop);
+  await p.waitForTimeout(1300);
+  await p.screenshot({ path: `${OUT}/final-d-story2.png` });
+  for (const [n, s] of [["fees","#fees"],["security","#security"],["commands","#commands"],["faq","#faq"],["footer",".footer"]]) {
+    await p.evaluate((x) => document.querySelector(x).scrollIntoView({ behavior: "instant" }), s);
+    await p.waitForTimeout(1100);
+    await p.screenshot({ path: `${OUT}/final-d-${n}.png` });
+  }
+  await p.close();
+  const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const pm = await ctx.newPage();
+  await pm.goto("http://localhost:4600", { waitUntil: "load" });
+  await pm.waitForTimeout(1500);
+  await pm.screenshot({ path: `${OUT}/final-m-hero.png` });
+  await pm.evaluate(() => document.querySelector("#fees").scrollIntoView({ behavior: "instant" }));
+  await pm.waitForTimeout(1000);
+  await pm.screenshot({ path: `${OUT}/final-m-fees.png` });
+  await pm.evaluate(() => document.querySelector("#how-it-works").scrollIntoView({ behavior: "instant" }));
+  await pm.waitForTimeout(700);
+  await pm.evaluate((y) => scrollTo(0, y + 600), await pm.evaluate(() => document.querySelector("#how-it-works").getBoundingClientRect().top + scrollY));
+  await pm.waitForTimeout(800);
+  await pm.screenshot({ path: `${OUT}/final-m-story.png` });
+  await pm.evaluate(() => scrollTo(0, document.body.scrollHeight));
+  await pm.waitForTimeout(1200);
+  await pm.screenshot({ path: `${OUT}/final-m-footer.png` });
+  console.log("shots done");
+  await b.close(); process.exit(0);
+})().catch(e => { console.log("FATAL", e.message); process.exit(1); });
