@@ -13,12 +13,12 @@ function Poster() {
     <svg viewBox="0 0 640 520" className="hero-poster-fallback" aria-hidden style={{ width: "min(88vw, 560px)", height: "auto" }}>
       <g transform="translate(320,250)">
         <polygon points="0,-150 130,-75 130,75 0,150 -130,75 -130,-75" fill="#241e12" stroke="#F0B90B" strokeWidth="5" />
-        <polygon points="0,-105 91,-52 91,52 0,105 -91,52 -91,-52" fill="none" stroke="#1d6650" strokeWidth="5" />
-        <circle cx="0" cy="0" r="34" fill="#F0B90B" />
+        <polygon className="p-ring" points="0,-105 91,-52 91,52 0,105 -91,52 -91,-52" fill="none" stroke="#1d6650" strokeWidth="5" />
+        <circle className="p-core" cx="0" cy="0" r="34" fill="#F0B90B" />
         <circle cx="-215" cy="-66" r="22" fill="#cfc7b4" />
         <circle cx="215" cy="52" r="22" fill="#1d6650" />
-        <path d="M-193 -60 C -120 -120, -60 -90, -24 -30" stroke="#F0B90B" strokeWidth="5" fill="none" strokeLinecap="round" strokeDasharray="2 14" />
-        <circle cx="-60" cy="-88" r="13" fill="#F0B90B" />
+        <path className="p-dash" d="M-193 -60 C -120 -120, -60 -90, -24 -30" stroke="#F0B90B" strokeWidth="5" fill="none" strokeLinecap="round" strokeDasharray="2 14" />
+        <circle className="p-token" cx="-60" cy="-88" r="13" fill="#F0B90B" />
       </g>
     </svg>
   );
@@ -32,11 +32,11 @@ export default function Hero() {
 
   /* Lazy-mount WebGL only AFTER the page fully loads + browser is idle, so the
      scene download never competes with the hero render (Part 12 performance).
-     Mobile keeps the poster — text and CTA immediately, no scene weight. */
+     Runs on phones too — the scene is tiny and pauses off-screen; the poster
+     shows until it is ready, so text and CTA still render immediately. */
   useEffect(() => {
     const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const desktop = window.matchMedia("(min-width: 1081px)").matches;
-    if (rm || !desktop) return;
+    if (rm) return;
     let done = false;
     const go = () => {
       if (done) return;

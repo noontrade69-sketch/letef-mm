@@ -151,6 +151,44 @@ export default function Story() {
     };
   }, [mode]);
 
+  /* Static mode (mobile / reduced motion): still alive — the diagram draws
+     itself when it scrolls into view, steps slide up. */
+  useEffect(() => {
+    if (mode === "pinned") return;
+    const root = secRef.current;
+    if (!root) return;
+    const diagram = root.querySelector(".diagram");
+    const steps = Array.from(root.querySelectorAll<HTMLElement>(".sstep"));
+    const ios: IntersectionObserver[] = [];
+    if (diagram) {
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting) {
+            diagram.classList.add("drawn");
+            io.disconnect();
+          }
+        },
+        { threshold: 0.3 }
+      );
+      io.observe(diagram);
+      ios.push(io);
+    }
+    const io2 = new IntersectionObserver(
+      (es) => {
+        for (const e of es) {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add("in");
+            io2.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.18 }
+    );
+    steps.forEach((st) => io2.observe(st));
+    ios.push(io2);
+    return () => ios.forEach((io) => io.disconnect());
+  }, [mode]);
+
   return (
     <section className="story" id="how-it-works" ref={secRef} style={mode === "pinned" ? { height: "700vh" } : undefined}>
       {mode === "pinned" ? (
@@ -183,11 +221,11 @@ export default function Story() {
         <div className="story-static">
           <div className="diagram" aria-hidden>
             <svg viewBox="0 0 860 460">
-              <path d="M 150 320 C 300 180, 420 180, 430 190" stroke="#c99700" strokeWidth="6" fill="none" strokeLinecap="round" />
-              <path d="M 434 200 C 480 220, 580 240, 710 320" stroke="#c99700" strokeWidth="6" fill="none" strokeLinecap="round" />
-              <path d="M 150 330 C 320 470, 560 470, 710 330" stroke="#E04E1B" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="2 16" />
+              <path className="dr dr-1" d="M 150 320 C 300 180, 420 180, 430 190" stroke="#c99700" strokeWidth="6" fill="none" strokeLinecap="round" />
+              <path className="dr dr-2" d="M 434 200 C 480 220, 580 240, 710 320" stroke="#c99700" strokeWidth="6" fill="none" strokeLinecap="round" />
+              <path className="dr dr-3 march" d="M 150 330 C 320 470, 560 470, 710 330" stroke="#E04E1B" strokeWidth="6" fill="none" strokeLinecap="round" />
               <polygon points="430,120 512,166 512,240 430,286 348,240 348,166" fill="#241e12" stroke="#F0B90B" strokeWidth="5" />
-              <circle cx="430" cy="203" r="22" fill="#F0B90B" />
+              <circle className="d-core" cx="430" cy="203" r="22" fill="#F0B90B" />
               <circle cx="150" cy="320" r="16" fill="#F0B90B" stroke="#17130B" strokeWidth="4" />
               <circle cx="710" cy="320" r="16" fill="#F0B90B" stroke="#17130B" strokeWidth="4" />
               <text x="150" y="368" textAnchor="middle" fontFamily="var(--mono)" fontSize="15" fontWeight="600">SELLER</text>

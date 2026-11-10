@@ -131,10 +131,11 @@ function Scene({ running }: { running: boolean }) {
 }
 
 export default function VaultScene({ running }: { running: boolean }) {
+  const small = typeof window !== "undefined" && window.innerWidth < 1081;
   return (
     <Canvas
       camera={{ position: [0, 0.4, 7.4], fov: 38 }}
-      dpr={[1, 1.75]}
+      dpr={small ? [1, 1.3] : [1, 1.75]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ background: "transparent" }}
     >

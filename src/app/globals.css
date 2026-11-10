@@ -440,9 +440,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .menu-btn { display: flex; }
   .sticky-cta { display: block; }
   .footer { padding-bottom: 100px; }
-  .hero-inner { min-height: 0; }
-  .hero-stage { min-height: 380px; }
-  .st-3 { display: none; }
+  .hero-inner { min-height: 0; padding-top: 110px; }
+  .hero-type { position: relative; z-index: 3; }
+  .hero-canvas { position: relative; inset: auto; height: 400px; margin: 6px 0 4px; display: flex; align-items: center; justify-content: center; }
+  .hero-canvas canvas { pointer-events: none; }
+  .stickers { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 14px; }
+  .sticker { position: static; }
+  .st-3 { display: inline-block; }
+  .hero-copy { margin-top: 22px; }
   .trust { grid-template-columns: 1fr 1fr; }
   .trust .cell:nth-child(odd) { border-left: 0; padding-left: 0; }
   .trust .cell:nth-child(n+3) { border-top: 1px solid rgba(245, 239, 226, 0.16); }
@@ -465,11 +470,39 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .vrow { grid-template-columns: 1fr auto; row-gap: 8px; }
   .vrow .tier { grid-column: 1 / -1; }
   .vrow .ext { grid-column: 2; }
-  .sticker { position: static; margin: 14px 14px 0 0; display: inline-block; }
-  .stickers { position: relative; z-index: 3; display: flex; flex-wrap: wrap; }
-  .hero-copy { margin-top: 20px; }
   .dispute-item { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* ============ ambient animation (poster, stickers, diagrams) ============ */
+@keyframes corePulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.16); opacity: 0.85; } }
+@keyframes ringSpin { to { transform: rotate(360deg); } }
+@keyframes dashMarch { to { stroke-dashoffset: -30; } }
+@keyframes bob { 0%, 100% { transform: rotate(var(--tilt, 0deg)) translateY(0); } 50% { transform: rotate(var(--tilt, 0deg)) translateY(-7px); } }
+@keyframes tokenFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(8px, -7px); } }
+
+.hero-poster-fallback .p-core { transform-box: fill-box; transform-origin: center; animation: corePulse 2.4s ease-in-out infinite; }
+.hero-poster-fallback .p-ring { transform-box: fill-box; transform-origin: center; animation: ringSpin 16s linear infinite; }
+.hero-poster-fallback .p-dash { animation: dashMarch 1.5s linear infinite; }
+.hero-poster-fallback .p-token { animation: tokenFloat 3.2s ease-in-out infinite; }
+
+.sticker { animation: bob 5.2s ease-in-out infinite; }
+.st-2 { animation-delay: 0.9s; }
+.st-3 { animation-delay: 1.7s; }
+
+.pulse-core { transform-box: fill-box; transform-origin: center; animation: corePulse 2.6s ease-in-out infinite; }
+.march { animation: dashMarch 1.3s linear infinite; }
+
+/* static story: diagram draws when scrolled into view (.drawn added by JS) */
+.story-static .diagram .dr { transition: stroke-dashoffset 1.15s var(--ease); }
+.story-static .diagram .dr-1 { stroke-dasharray: 320; stroke-dashoffset: 320; }
+.story-static .diagram .dr-2 { stroke-dasharray: 330; stroke-dashoffset: 330; transition-delay: 0.55s; }
+.story-static .diagram .dr-3 { stroke-dasharray: 700; stroke-dashoffset: 700; transition-delay: 1.05s; }
+.story-static .diagram.drawn .dr-1, .story-static .diagram.drawn .dr-2, .story-static .diagram.drawn .dr-3 { stroke-dashoffset: 0; }
+.story-static .diagram .d-core { transform-box: fill-box; transform-origin: center; animation: corePulse 2.4s ease-in-out infinite; }
+.story-static .sstep .in { opacity: 0; transform: translateY(26px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.story-static .sstep.in .in { opacity: 1; transform: none; }
+
+.final .vault-still { animation: bob 6s ease-in-out infinite; }
 
 /* ============ reduced motion ============ */
 @media (prefers-reduced-motion: reduce) {
@@ -480,6 +513,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .story-stage { display: none; }
   .story-static { display: block; }
   .btn { transition: none; }
+  .hero-poster-fallback .p-core, .hero-poster-fallback .p-ring, .hero-poster-fallback .p-dash,
+  .hero-poster-fallback .p-token, .sticker, .pulse-core, .march, .final .vault-still,
+  .story-static .diagram .d-core { animation: none; }
+  .story-static .diagram .dr { stroke-dashoffset: 0; transition: none; }
+  .story-static .sstep .in { opacity: 1; transform: none; transition: none; }
 }
 
 @media (max-width: 640px) {
@@ -487,4 +525,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .brand img { width: 26px; height: 26px; }
   .head-cta .btn { height: 38px; padding: 0 12px; font-size: 12.5px; gap: 7px; }
   .header .wrap { gap: 14px; }
+}
+
+/* header: never wrap brand or CTA */
+.brand { white-space: nowrap; }
+.head-cta .btn { white-space: nowrap; }
+@media (max-width: 640px) {
+  .head-cta .btn { height: 36px; padding: 0 10px; font-size: 11.5px; gap: 6px; }
+  .head-cta .btn svg { width: 14px; height: 14px; }
+  .brand { font-size: 14px; }
 }
