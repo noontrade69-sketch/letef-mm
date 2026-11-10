@@ -1,14 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { LINKS, TRUST_STRIP, STICKERS } from "@/lib/data";
 import { TelegramIcon } from "./Icons";
 
-const VaultScene = dynamic(() => import("./VaultScene"), { ssr: false });
-
 function Poster() {
-  /* SVG poster fallback — same composition, shown until WebGL mounts (and forever if unavailable) */
+  /* Animated SVG vault poster — the hero object on every device.
+     Pulses, spins, marches and floats via CSS (no WebGL anywhere). */
   return (
     <svg viewBox="0 0 640 520" className="hero-poster-fallback" aria-hidden style={{ width: "min(88vw, 560px)", height: "auto" }}>
       <g transform="translate(320,250)">
@@ -25,54 +23,13 @@ function Poster() {
 }
 
 export default function Hero() {
-  const [mount3d, setMount3d] = useState(false);
-  const [running, setRunning] = useState(true);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
-
-  /* Lazy-mount WebGL only AFTER the page fully loads + browser is idle, so the
-     scene download never competes with the hero render (Part 12 performance).
-     Runs on phones too — the scene is tiny and pauses off-screen; the poster
-     shows until it is ready, so text and CTA still render immediately. */
-  useEffect(() => {
-    const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (rm) return;
-    let done = false;
-    const go = () => {
-      if (done) return;
-      done = true;
-      const idle = (window as unknown as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback;
-      if (idle) idle(() => setMount3d(true));
-      else setTimeout(() => setMount3d(true), 200);
-    };
-    if (document.readyState === "complete") {
-      const t = setTimeout(go, 400);
-      return () => clearTimeout(t);
-    }
-    window.addEventListener("load", go, { once: true });
-    return () => window.removeEventListener("load", go);
-  }, []);
-
-  /* Pause rendering when hero is off-screen or tab hidden (Part 12) */
-  useEffect(() => {
-    if (!mount3d) return;
-    const io = new IntersectionObserver(([e]) => setRunning(e.isIntersecting && !document.hidden), { threshold: 0.05 });
-    if (stageRef.current) io.observe(stageRef.current);
-    const vis = () => setRunning(document.hidden ? false : true);
-    document.addEventListener("visibilitychange", vis);
-    return () => {
-      io.disconnect();
-      document.removeEventListener("visibilitychange", vis);
-    };
-  }, [mount3d]);
-
   return (
-    <section className="hero" id="top" ref={heroRef}>
+    <section className="hero" id="top">
       <div className="hero-grid-lines" aria-hidden />
       <div className="wrap">
         <div className="hero-inner">
           <p className="kicker hero-kicker">Letef Mm · Trusted P2P Escrow</p>
-          <div className="hero-stage" ref={stageRef}>
+          <div className="hero-stage">
             <h1 className="display hero-type">
               <span className="l1">P2P trades.</span>
               <br />
@@ -81,7 +38,7 @@ export default function Hero() {
               <span className="l1">by a smart contract.</span>
             </h1>
             <div className="hero-canvas" aria-hidden>
-              {mount3d ? <VaultScene running={running} /> : <Poster />}
+              <Poster />
             </div>
             <div className="stickers" aria-label="Key facts">
               <span className="sticker st-1">{STICKERS[0].t}<small>{STICKERS[0].s}</small></span>

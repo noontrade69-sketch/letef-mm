@@ -43,7 +43,7 @@ text label. Contrast checked for body copy on every background.
 All self-hosted via next/font. No external font requests.
 
 ## Sitemap (per reference pack)
-1. Hero (3D vault, giant type, bot + community CTAs, join-both note, trust strip)
+1. Hero (animated vault poster — SVG, no WebGL; giant type, bot + community CTAs, join-both note, trust strip)
 2. Problem / Promise
 3. How it works — ONE pinned story: camera into the vault, then six color-blocked steps
 4. Refund / Dispute branch
@@ -58,5 +58,4 @@ All self-hosted via next/font. No external font requests.
 ## Motion rules (hard)
 Native scroll; no hijack; one pinned story only. Every large movement explains the
 transaction. The fiat line never enters the vault. Disputes never animate as automatic
-refunds. Reduced motion: full static story, marquee static, loader skipped, 3D replaced
-by the poster fallback. Loader ≤1.2 s, skippable, never blocks headline or CTA.
+refunds. Reduced motion: full static story, marquee static, loader skipped, poster animations off. Loader ≤1.2 s, skippable, never blocks headline or CTA.
