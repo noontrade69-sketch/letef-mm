@@ -89,7 +89,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero h1 .acc { color: var(--yellow); }
 .hero .sub { margin-top: 18px; max-width: 480px; font-size: 15px; color: var(--text-2); }
 .hero-cta { display: flex; gap: 12px; margin-top: 26px; }
-.join-note { display: flex; gap: 8px; margin-top: 18px; font-size: 12.5px; color: var(--text-3); }
+.join-note { display: block; margin-top: 18px; font-size: 12.5px; color: var(--text-3); line-height: 1.7; }
 .join-note b { color: var(--text-2); font-weight: 600; }
 .join-note a { color: var(--text-2); border-bottom: 1px solid var(--line); }
 .join-note a:hover { color: var(--yellow); }
@@ -317,7 +317,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 @media (max-width: 640px) {
   .hero { padding-top: 96px; }
-  .join-note { flex-direction: column; gap: 3px; }
   .factstrip { grid-template-columns: 1fr 1fr; }
   .factstrip .cell { border-left: 0; border-top: 1px solid var(--hair); padding-left: 0; }
   .factstrip .cell:nth-child(even) { border-left: 1px solid var(--hair); padding-left: 16px; }
