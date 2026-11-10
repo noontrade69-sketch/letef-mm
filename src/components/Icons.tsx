@@ -24,7 +24,7 @@ export const ExternalIcon = (p: React.SVGProps<SVGSVGElement>) => (
 );
 
 export const ChevronIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden {...p}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden {...p}>
     <path d="m6 9 6 6 6-6" />
   </svg>
 );
@@ -37,13 +37,46 @@ export const LockIcon = (p: React.SVGProps<SVGSVGElement>) => (
 );
 
 export const MenuIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden {...p}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden {...p}>
     <path d="M4 7h16M4 12h16M4 17h16" />
   </svg>
 );
 
 export const CloseIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden {...p}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden {...p}>
     <path d="M6 6l12 12M18 6 6 18" />
   </svg>
 );
+
+/* Vault mark used in the dive + final CTA (original, geometric) */
+export const VaultGlyph = (p: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 120 116" fill="none" aria-hidden {...p}>
+    <polygon points="60,4 112,33 112,83 60,112 8,83 8,33" stroke="currentColor" strokeWidth="4" fill="none" />
+    <polygon points="60,26 93,45 93,71 60,90 27,71 27,45" stroke="#F0B90B" strokeWidth="4" fill="none" />
+    <circle cx="60" cy="58" r="12" fill="#F0B90B" />
+  </svg>
+);
+
+/* Original flat characters (geometric, palette colors) */
+export function PersonFigure({
+  accent,
+  facing = "right",
+  className,
+}: {
+  accent: string;
+  facing?: "left" | "right";
+  className?: string;
+}) {
+  return (
+    <svg viewBox="0 0 120 170" className={className} aria-hidden style={facing === "left" ? { transform: "scaleX(-1)" } : undefined}>
+      <circle cx="60" cy="30" r="20" fill="#F5EFE2" stroke="#17130B" strokeWidth="4" />
+      <path d="M28 96c0-18 14-32 32-32s32 14 32 32v14H28Z" fill={accent} stroke="#17130B" strokeWidth="4" />
+      <path d="M36 84 16 118" stroke="#17130B" strokeWidth="4" strokeLinecap="round" />
+      <path d="M84 84l20 34" stroke="#17130B" strokeWidth="4" strokeLinecap="round" />
+      <path d="M44 112v44M76 112v44" stroke="#17130B" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="53" cy="28" r="2.6" fill="#17130B" />
+      <circle cx="67" cy="28" r="2.6" fill="#17130B" />
+      <path d="M54 37q6 5 12 0" stroke="#17130B" strokeWidth="3" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}

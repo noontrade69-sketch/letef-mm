@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { COMMANDS } from "@/lib/data";
-import { CopyIcon, CheckIcon } from "./Icons";
 
 function CmdRow({ cmd, desc }: { cmd: string; desc: string }) {
   const [ok, setOk] = useState(false);
@@ -38,7 +37,7 @@ function CmdRow({ cmd, desc }: { cmd: string; desc: string }) {
       <code>{cmd}</code>
       <p>{desc}</p>
       <button className={`copy-btn${ok ? " ok" : ""}`} onClick={copy} aria-label={`Copy ${cmd}`}>
-        {ok ? <CheckIcon /> : <CopyIcon />}
+        {ok ? "Copied" : "Copy"}
       </button>
     </div>
   );
@@ -46,30 +45,20 @@ function CmdRow({ cmd, desc }: { cmd: string; desc: string }) {
 
 export default function Commands() {
   return (
-    <section className="sec" id="commands">
+    <section className="sec commands" id="commands">
       <div className="wrap">
-        <div className="sec-head rv">
-          <h2>The bot&rsquo;s whole vocabulary.</h2>
-          <p className="sub">
-            Scope depends on where you type it — main group, escrow room, or private chat.
-          </p>
-        </div>
-
-        <div className="term rv">
-          <div className="term-bar" aria-hidden>
-            <i /><i /><i />
-            <span className="path">letef@bot ~ commands</span>
-          </div>
-          <div className="term-cols">
-            {COMMANDS.map((g) => (
-              <div className="term-col" key={g.group}>
-                <p className="g">{g.group}</p>
-                {g.items.map((it) => (
-                  <CmdRow key={it.cmd} {...it} />
-                ))}
-              </div>
-            ))}
-          </div>
+        <p className="kicker rv" style={{ color: "var(--green)" }}>Commands</p>
+        <h2 className="rv">Everything the bot answers to.</h2>
+        <p className="lede rv">Scope depends on where you type it — main group, escrow room, or private chat.</p>
+        <div className="cmd-cols rv">
+          {COMMANDS.map((g) => (
+            <div className="cmd-col" key={g.group}>
+              <p className="g">{g.group}</p>
+              {g.items.map((it) => (
+                <CmdRow key={it.cmd} {...it} />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>

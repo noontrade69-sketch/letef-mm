@@ -8,7 +8,7 @@ export default function Reveal({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
-    const els = root.classList.contains("rv") ? [root] : Array.from(root.querySelectorAll<HTMLElement>(".rv"));
+    const els = Array.from(root.querySelectorAll<HTMLElement>(".rv"));
     if (!els.length) return;
     const io = new IntersectionObserver(
       (entries) => {
@@ -19,7 +19,7 @@ export default function Reveal({ children }: { children: React.ReactNode }) {
           }
         }
       },
-      { threshold: 0.08, rootMargin: "0px 0px -6% 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();

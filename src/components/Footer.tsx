@@ -8,18 +8,18 @@ export default function Footer() {
           <div className="foot-grid">
             <div className="foot-brand">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/letef-mark.svg" alt="Letef Mm logo" width={30} height={30} />
+              <img src="/letef-mark.svg" alt="Letef Mm logo" width={34} height={34} />
               <p className="fb-name">Letef Mm</p>
-              <p className="fb-sub">P2P escrow, run in Telegram</p>
+              <p className="fb-sub">Trusted P2P Escrow · Telegram-native</p>
             </div>
             <div>
               <h3>Site</h3>
               <ul>
                 <li><a href="#how-it-works">How it works</a></li>
                 <li><a href="#fees">Fees</a></li>
-                <li><a href="#vaults">Vaults</a></li>
-                <li><a href="#commands">Commands</a></li>
-                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#market">Market reference</a></li>
+                <li><a href="#terms">Terms &amp; risk</a></li>
               </ul>
             </div>
             <div>
@@ -36,7 +36,7 @@ export default function Footer() {
               <ul>
                 <li><a href={LINKS.support} target="_blank" rel="noopener noreferrer">{LINKS.supportHandle}</a></li>
                 <li><a href={LINKS.line1} target="_blank" rel="noopener noreferrer">@zvaku</a></li>
-                <li><a href={LINKS.developer} target="_blank" rel="noopener noreferrer">@letef</a></li>
+                <li><a href={LINKS.developer} target="_blank" rel="noopener noreferrer">@letef (dev)</a></li>
               </ul>
             </div>
           </div>
@@ -44,7 +44,7 @@ export default function Footer() {
             <span>© {new Date().getFullYear()} Letef Mm — Trusted P2P Escrow</span>
             <span>
               Crypto trading carries risk. Escrow secures the crypto leg only — see{" "}
-              <a href="#vaults">Security &amp; risk disclosure</a>.
+              <a href="#terms">Terms &amp; risk</a>.
             </span>
           </div>
         </div>

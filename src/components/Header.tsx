@@ -7,17 +7,22 @@ import { TelegramIcon, MenuIcon, CloseIcon } from "./Icons";
 const NAV = [
   ["How it works", "#how-it-works"],
   ["Fees", "#fees"],
-  ["Vaults", "#vaults"],
+  ["Security", "#security"],
+  ["Vouches", "#vouches"],
   ["Commands", "#commands"],
   ["FAQ", "#faq"],
 ];
 
 export default function Header() {
   const [solid, setSolid] = useState(false);
+  const [onHero, setOnHero] = useState(true);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const fn = () => setSolid(window.scrollY > 8);
+    const fn = () => {
+      setSolid(window.scrollY > 24);
+      setOnHero(window.scrollY < window.innerHeight * 0.72);
+    };
     fn();
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
@@ -25,11 +30,11 @@ export default function Header() {
 
   return (
     <>
-      <header className={`header${solid ? " solid" : ""}`}>
+      <header className={`header${solid ? " solid" : ""}${onHero && !open ? " on-hero" : ""}`}>
         <div className="wrap">
           <a href="#top" className="brand">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/letef-mark.svg" alt="Letef Mm logo" width={26} height={26} />
+            <img src="/letef-mark.svg" alt="Letef Mm logo" width={30} height={30} />
             Letef Mm
           </a>
           <nav className="nav" aria-label="Main">
@@ -38,9 +43,8 @@ export default function Header() {
             ))}
           </nav>
           <div className="head-cta">
-            <a className="comm" href={LINKS.group} target="_blank" rel="noopener noreferrer">Community</a>
-            <a className="btn btn-y" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
-              <TelegramIcon /> Open Bot
+            <a className="btn btn-amber" href={LINKS.bot} target="_blank" rel="noopener noreferrer">
+              <TelegramIcon /> Open Telegram Bot
             </a>
             <button
               className="menu-btn"
@@ -57,7 +61,6 @@ export default function Header() {
         {NAV.map(([t, h]) => (
           <a key={h} href={h} onClick={() => setOpen(false)}>{t}</a>
         ))}
-        <a href={LINKS.group} target="_blank" rel="noopener noreferrer">Community — {LINKS.groupHandle}</a>
       </nav>
     </>
   );

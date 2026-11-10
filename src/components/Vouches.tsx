@@ -1,28 +1,29 @@
 import { VOUCH_POINTS, LINKS } from "@/lib/data";
-import { CheckIcon, ExternalIcon } from "./Icons";
+import { CheckIcon } from "./Icons";
 
+/* Part 9.2 H — monochrome section, ONE accent (the amber proof card) */
 export default function Vouches() {
   return (
-    <section className="sec" id="vouches">
+    <section className="sec vouches" id="vouches">
       <div className="wrap">
-        <div className="sec-head rv">
-          <h2>Finished deals leave receipts.</h2>
-          <p className="sub">
-            Vouches are public, copyable, and re-issued on demand. See them where they land:{" "}
-            <a href={LINKS.vouch} target="_blank" rel="noopener noreferrer">{LINKS.vouchHandle}</a>
-          </p>
-        </div>
-
+        <p className="kicker rv">Proof / vouches</p>
+        <h2 className="rv">Every finished deal leaves a receipt.</h2>
         <div className="vouch-grid">
-          <ul className="vlist rv">
-            {VOUCH_POINTS.map((v) => (
-              <li key={v.slice(0, 26)}>
-                <CheckIcon />
-                <span>{v}</span>
-              </li>
-            ))}
-          </ul>
-
+          <div>
+            <ul className="vlist rv">
+              {VOUCH_POINTS.map((v) => (
+                <li key={v.slice(0, 26)}>
+                  <CheckIcon />
+                  <span>{v}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="vouch-cta rv">
+              <a className="btn btn-amber" href={LINKS.vouch} target="_blank" rel="noopener noreferrer">
+                See real vouches in {LINKS.vouchHandle}
+              </a>
+            </div>
+          </div>
           <div className="rv">
             <div className="proof">
               <div className="ph">

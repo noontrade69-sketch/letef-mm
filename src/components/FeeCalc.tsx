@@ -2,26 +2,31 @@
 
 import { useState } from "react";
 
-const TAG_OPTIONS = [
+/* Part 4 rules: tag count picker + network picker + a SEPARATE network-fee-row
+   picker (standard / with bio tag). Never inferred from the tag count.
+   Shows the assumptions next to the numbers. Not a live quote. */
+
+const TAGS = [
   { label: "No tag", n: 0 },
   { label: "One side", n: 1 },
   { label: "Both sides", n: 2 },
 ];
-const NETWORKS = [
-  { label: "BNB Chain (BEP-20)", fee: 0.2, taggedFee: 0.2 },
-  { label: "TRON (TRC-20)", fee: 3.0, taggedFee: 2.0 },
-];
 const RATES = [0.0075, 0.005, 0.0025];
+const NETWORKS = [
+  { label: "BNB Chain", full: "BNB Smart Chain (BEP-20)", std: 0.2, tag: 0.2 },
+  { label: "TRON", full: "TRON (TRC-20)", std: 3.0, tag: 2.0 },
+];
 
 export default function FeeCalc() {
   const [amt, setAmt] = useState("100");
   const [tags, setTags] = useState(2);
   const [net, setNet] = useState(0);
+  const [row, setRow] = useState<"std" | "tag">("tag");
 
   const amount = Math.max(0, parseFloat(amt) || 0);
   const service = amount * RATES[tags];
-  const network = tags === 2 ? NETWORKS[net].taggedFee : NETWORKS[net].fee;
-  const total = amount - service - network;
+  const networkFee = row === "tag" ? NETWORKS[net].tag : NETWORKS[net].std;
+  const netOut = amount - service - networkFee;
   const f = (x: number) => x.toFixed(2);
 
   return (
@@ -35,29 +40,37 @@ export default function FeeCalc() {
         value={amt}
         onChange={(e) => setAmt(e.target.value.replace(/[^0-9.]/g, ""))}
       />
-      <span className="lbl" id="calc-tags-lbl">@letefmm bio tag</span>
-      <div className="seg" role="group" aria-labelledby="calc-tags-lbl">
-        {TAG_OPTIONS.map((o) => (
+      <span className="lbl" id="lbl-tags">@letefmm bio tag</span>
+      <div className="seg c3" role="group" aria-labelledby="lbl-tags">
+        {TAGS.map((o) => (
           <button key={o.n} type="button" aria-pressed={tags === o.n} onClick={() => setTags(o.n)}>
             {o.label}
           </button>
         ))}
       </div>
-      <span className="lbl" id="calc-net-lbl">Network</span>
-      <div className="seg two" role="group" aria-labelledby="calc-net-lbl">
+      <span className="lbl" id="lbl-net">Network</span>
+      <div className="seg c2" role="group" aria-labelledby="lbl-net">
         {NETWORKS.map((n, i) => (
           <button key={n.label} type="button" aria-pressed={net === i} onClick={() => setNet(i)}>
             {n.label}
           </button>
         ))}
       </div>
+      <span className="lbl" id="lbl-row">Network fee row</span>
+      <div className="seg c2" role="group" aria-labelledby="lbl-row">
+        <button type="button" aria-pressed={row === "std"} onClick={() => setRow("std")}>Standard</button>
+        <button type="button" aria-pressed={row === "tag"} onClick={() => setRow("tag")}>With bio tag</button>
+      </div>
       <div className="calc-out" aria-live="polite">
         <div className="row"><span>Deal size</span><b>{f(amount)} USDT</b></div>
-        <div className="row"><span>Service fee ({(RATES[tags] * 100).toFixed(2)}%)</span><b>{f(service)} USDT</b></div>
-        <div className="row"><span>Network fee — {NETWORKS[net].label}</span><b>{f(network)} USDT</b></div>
-        <div className="row total"><span>Estimated net</span><b>{f(total)} USDT</b></div>
+        <div className="row"><span>Service fee ({(RATES[tags] * 100).toFixed(2)}% · {TAGS[tags].label})</span><b>{f(service)} USDT</b></div>
+        <div className="row"><span>Network fee ({NETWORKS[net].label} · {row === "tag" ? "with bio tag" : "standard"})</span><b>{f(networkFee)} USDT</b></div>
+        <div className="row total"><span>Estimated net</span><b>{f(netOut)} USDT</b></div>
       </div>
-      <p className="calc-note">Estimates only. The contract charges the fee on release or refund.</p>
+      <p className="calc-note">
+        Estimates only — not a live transaction quote. Assumptions shown above; the contract
+        charges the fee on release or refund.
+      </p>
     </div>
   );
 }
