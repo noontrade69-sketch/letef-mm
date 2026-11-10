@@ -6,7 +6,7 @@ const grotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk", 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://letef-mm-website.vercel.app"),
+  metadataBase: new URL("https://letef-mm.onrender.com"),
   title: "Letef Mm — Trusted P2P Escrow | On-Chain USDT Escrow in Telegram",
   description:
     "Letef Mm is a P2P escrow service for stablecoin trades. Funds are locked in a smart contract, released only when both sides confirm, and every completed deal is publicly vouched. From 0.25% fee.",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: "Letef Mm — Trusted P2P Escrow",
     description:
       "Funds locked in a smart contract. Released only when both sides confirm. Every completed deal publicly vouched. From 0.25% fee.",
-    url: "https://letef-mm-website.vercel.app",
+    url: "https://letef-mm.onrender.com",
     siteName: "Letef Mm",
     images: [{ url: "/og.jpg", width: 1200, height: 630 }],
     type: "website",
